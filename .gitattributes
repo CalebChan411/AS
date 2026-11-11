@@ -1,3 +1,0 @@
-# The assignment requires run.bat as a launcher; count Java source only.
-*.java linguist-detectable=true
-*.bat linguist-detectable=false
