@@ -21,18 +21,6 @@ java Main
 java Main < sample_input.txt
 ```
 
-Linux/macOS：
-
-```sh
-sh run.sh
-```
-
-当前 Codex 云环境的编译器位于 `/workspace/tools/bin/javac`，可运行：
-
-```sh
-JAVAC=/workspace/tools/bin/javac sh run.sh
-```
-
 直接在终端运行时显示菜单和输入提示；重定向输入时只显示操作结果。
 例如在 IDE 中 `System.console()` 为 null 时，仍可输入命令，只是不显示提示。
 
@@ -112,7 +100,7 @@ undo/redo 仍作用于原目标，不会误改另一个 fleet 中相同 ID 的�
 - `DeliveryVanFleet.java`
 - `RefrigeratedTruckFleet.java`
 
-`ORIGINAL_CLASSES.sha256` 记录原文件校验值；另有脚本可和原 ZIP 逐字节比较。
+`ORIGINAL_CLASSES.sha256` 记录原文件校验值，四个文件已与原 ZIP 逐字节比较。
 由于当前附件中只有 UML、没有另一份老师原始 Java 源码，这里的逐字节基准是你上传的 ZIP。
 
 **图中需要保留的说明**：diagram 的两个 concrete fleet 将角色常量标成 public (`+`)，
@@ -125,25 +113,21 @@ undo/redo 仍作用于原目标，不会误改另一个 fleet 中相同 ID 的�
 
 ## 验证
 
-以下测试用于开发检查，主程序不依赖它们。Java 测试不需要 JUnit。
+以下测试全部使用 Java，用于开发检查，主程序不依赖它们，不需要 JUnit。
 
-```sh
-mkdir -p build
+```bat
+mkdir build
 javac -d build *.java tests/RegressionTests.java
 java -cp build RegressionTests
-python3 tests/cli_regression.py
-python3 tests/verify_original_classes.py /path/to/SDFMS_Java_Prototype_StrictOriginalClasses.zip
 ```
 
-Windows 可先 `mkdir build`，再执行相同的 `javac`、`java` 命令；Python 命令按本机安装调整。
-当前云环境编译可用 `/workspace/tools/bin/javac --release 8` 替代 `javac`，已验证 Java 8 API 兼容。
+另可执行 `java Main < sample_input.txt` 检查完整的命令输入流程。
+已验证 Java 8 API 编译兼容。
 
 本版测试结果：
 
 - Java 回归：**224 checks / 10 groups** 通过，覆盖全部 11 种 command、五种变更的
   undo/redo、独立快照、重复恢复、跨 fleet 目标、删除后的对象和顺序、失败后的历史保护。
-- CLI：**62 checks** 通过，覆盖完整 sample、错误输入、重复 ID、跨 fleet 历史、
-  最小整数角色输入、11 种输入中断位置。
 - 四个原文件与上传 ZIP **逐字节一致**。
 
 Windows `run.bat` 已保留；当前环境运行的是 Linux，未声称实际执行过 Windows batch。
