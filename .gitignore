@@ -1,0 +1,3 @@
+*.class
+/build/
+__pycache__/
