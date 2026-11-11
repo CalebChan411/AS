@@ -137,7 +137,7 @@ public class Main {
         printPrompt("Please input driver information (id, name):- ");
         if (!scanner.hasNextLine()) return false;
         String[] details = parseDriverDetails(scanner.nextLine());
-        Integer role = readRole(scanner);
+        Integer role = readRole(scanner, manager.getFleetFactory(current));
         if (role == null) return true;
         invoker.execute(factory.createAddDriverCommand(details[0], details[1], role));
         return true;
@@ -153,7 +153,7 @@ public class Main {
         printPrompt("Please input driver ID:- ");
         if (!scanner.hasNextLine()) return false;
         String driverID = scanner.nextLine().trim();
-        Integer role = readRole(scanner);
+        Integer role = readRole(scanner, manager.getFleetFactory(current));
         if (role == null) return true;
         invoker.execute(factory.createModifyRoleCommand(driverID, role));
         return true;
@@ -175,8 +175,9 @@ public class Main {
         return true;
     }
 
-    private static Integer readRole(Scanner scanner) {
-        printPrompt("Role (1 or 2) :- ");
+    private static Integer readRole(Scanner scanner, FleetFactory factory) {
+        printPrompt("Role (1 = " + factory.getDriverRoleName(1)
+                + " | 2 = " + factory.getDriverRoleName(2) + ") :- ");
         if (!scanner.hasNextLine()) return null;
         String input = scanner.nextLine().trim();
         try {

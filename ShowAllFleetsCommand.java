@@ -1,4 +1,4 @@
-/** Displays every fleet through its existing polymorphic showFleet operation. */
+/** Displays fleet summaries using names supplied by each concrete factory. */
 public class ShowAllFleetsCommand extends BaseCommand {
     private FleetManager manager;
 
@@ -11,7 +11,11 @@ public class ShowAllFleetsCommand extends BaseCommand {
             System.out.println("No fleets available.");
             return;
         }
-        for (VehicleFleet fleet : manager.getFleets()) fleet.showFleet();
+        for (VehicleFleet fleet : manager.getFleets()) {
+            FleetFactory factory = manager.getFleetFactory(fleet);
+            System.out.println(factory.getFleetTypeName() + " " + fleet.getName()
+                    + " (" + fleet.getFleetID() + ")");
+        }
     }
 
     public String displayName() {

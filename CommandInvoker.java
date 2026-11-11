@@ -65,18 +65,13 @@ public class CommandInvoker {
     public void showUndoRedoList() {
         System.out.println("Undo List");
         for (Command command : undoStack) {
-            System.out.println();
             System.out.println(command.displayName());
         }
-        System.out.println();
         System.out.println("-- End of undo list --");
-        System.out.println();
         System.out.println("Redo List");
         for (Command command : redoStack) {
-            System.out.println();
             System.out.println(command.displayName());
         }
-        System.out.println();
         System.out.println("-- End of redo list --");
     }
 }

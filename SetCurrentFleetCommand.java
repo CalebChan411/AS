@@ -12,7 +12,7 @@ public class SetCurrentFleetCommand extends BaseCommand {
         VehicleFleet fleet = manager.findFleet(fleetID);
         if (fleet == null) throw new CommandExecutionException("Fleet " + fleetID + " is not found!");
         manager.setCurrentFleet(fleet);
-        System.out.println("Current fleet is changed to " + fleet.getFleetID() + ".");
+        System.out.println("Changed current fleet to " + fleet.getFleetID() + ".");
     }
 
     public String displayName() {

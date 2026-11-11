@@ -1,6 +1,7 @@
 /** Adds a factory-created driver to the fleet captured on first execution. */
 public class AddDriverCommand extends UndoableCommand {
     private DriverFactory driverFactory;
+    private FleetFactory fleetFactory;
     private String driverID;
     private String driverName;
     private int role;
@@ -22,6 +23,7 @@ public class AddDriverCommand extends UndoableCommand {
         if (FleetUtil.findDriver(fleet, driverID) != null) {
             throw new CommandExecutionException("Driver " + driverID + " already exists in the current fleet!");
         }
+        fleetFactory = manager.getFleetFactory(fleet);
         driver = driverFactory.createDriver(driverID, driverName);
         driver.setRole(role);
         redo();
@@ -53,6 +55,7 @@ public class AddDriverCommand extends UndoableCommand {
     }
 
     public String displayName() {
-        return "Add driver, " + driverID + ", " + driverName + ", role " + role;
+        String roleName = fleetFactory == null ? String.valueOf(role) : fleetFactory.getDriverRoleName(role);
+        return "Add driver, " + driverID + ", " + driverName + ", " + roleName;
     }
 }

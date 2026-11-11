@@ -1,6 +1,7 @@
 /** Creates and selects a fleet; retains that same object for undo/redo. */
 public class CreateFleetCommand extends UndoableCommand {
     private FleetFactoryRegistry fleetRegistry;
+    private FleetFactory factory;
     private String type;
     private String fleetID;
     private String fleetName;
@@ -17,7 +18,7 @@ public class CreateFleetCommand extends UndoableCommand {
     }
 
     public void execute() {
-        FleetFactory factory = fleetRegistry.getFactory(type);
+        factory = fleetRegistry.getFactory(type);
         if (factory == null) throw new CommandExecutionException("Invalid fleet type!");
         if (manager.hasFleet(fleetID)) {
             throw new CommandExecutionException("Fleet ID " + fleetID + " already exists!");
@@ -26,7 +27,9 @@ public class CreateFleetCommand extends UndoableCommand {
         fleet.setName(fleetName);
         previousCurrentFleet = manager.getCurrentFleet();
         redo();
-        System.out.println("Fleet " + fleet.getFleetID() + " is created.");
+        String typeName = factory.getFleetTypeName().toLowerCase();
+        System.out.println(Character.toUpperCase(typeName.charAt(0))
+                + typeName.substring(1) + " is created.");
         System.out.println("Current fleet is changed to " + fleet.getFleetID() + ".");
     }
 
@@ -49,11 +52,13 @@ public class CreateFleetCommand extends UndoableCommand {
 
     public void redo() {
         if (fleet == null) throw new CommandExecutionException("Fleet has not been created.");
-        manager.addFleet(fleet);
+        manager.addFleet(fleet, factory);
         manager.setCurrentFleet(fleet);
     }
 
     public String displayName() {
-        return "Create fleet, " + type + ", " + fleetID + ", " + fleetName;
+        FleetFactory fleetFactory = factory == null ? fleetRegistry.getFactory(type) : factory;
+        String typeName = fleetFactory == null ? type : fleetFactory.getFleetTypeName().toLowerCase();
+        return "Create " + typeName + ", " + fleetID + ", " + fleetName;
     }
 }

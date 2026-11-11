@@ -2,4 +2,6 @@
 public interface FleetFactory {
     VehicleFleet createFleet(String fleetID);
     String getType();
+    String getFleetTypeName();
+    String getDriverRoleName(int role);
 }
